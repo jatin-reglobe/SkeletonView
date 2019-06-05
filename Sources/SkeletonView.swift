@@ -55,9 +55,11 @@ extension UIView {
         subviewsSkeletonables.recursiveSearch(leafBlock: {
             guard !isSkeletonActive else { return }
             isUserInteractionEnabled = false
-            saveViewState()
-            (self as? PrepareForSkeleton)?.prepareViewForSkeleton()
-            addSkeletonLayer(withType: type, usingColors: colors, animated: animated, animation: animation)
+		if !(self is UICollectionView) {
+        	    saveViewState()
+	            (self as? PrepareForSkeleton)?.prepareViewForSkeleton()
+		    addSkeletonLayer(withType: type, usingColors: colors, animated: animated, animation: animation)
+		}
         }) { subview in
             subview.recursiveShowSkeleton(withType: type, usingColors: colors, animated: animated, animation: animation)
         }
