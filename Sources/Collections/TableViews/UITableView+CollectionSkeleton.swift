@@ -10,6 +10,11 @@ import UIKit
 
 extension UITableView: CollectionSkeleton {
     
+    public override var isAddLayer: Bool {
+        return false
+    }
+    
+    
     var estimatedNumberOfRows: Int {
         return Int(ceil(frame.height/rowHeight))
     }
@@ -58,5 +63,10 @@ extension UITableView: CollectionSkeleton {
         guard rowHeight == UITableView.automaticDimension else { return rowHeight }
         rowHeight = estimatedRowHeight
         return estimatedRowHeight
+    }
+}
+extension UITableViewCell {
+    public override var isAddLayer: Bool {
+        return false
     }
 }

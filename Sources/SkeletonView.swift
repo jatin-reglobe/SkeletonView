@@ -55,11 +55,13 @@ extension UIView {
         subviewsSkeletonables.recursiveSearch(leafBlock: {
             guard !isSkeletonActive else { return }
             isUserInteractionEnabled = false
-		if !(self is UICollectionView) {
-        	    saveViewState()
-	            (self as? PrepareForSkeleton)?.prepareViewForSkeleton()
-		    addSkeletonLayer(withType: type, usingColors: colors, animated: animated, animation: animation)
-		}
+            saveViewState()
+            (self as? PrepareForSkeleton)?.prepareViewForSkeleton()
+            if isAddLayer {
+                addSkeletonLayer(withType: type, usingColors: colors, animated: animated, animation: animation)
+            }else{
+                status = .on
+            }
         }) { subview in
             subview.recursiveShowSkeleton(withType: type, usingColors: colors, animated: animated, animation: animation)
         }
@@ -74,7 +76,11 @@ extension UIView {
         isUserInteractionEnabled = true
         subviewsSkeletonables.recursiveSearch(leafBlock: {
             recoverViewState(forced: false)
-            removeSkeletonLayer()
+            if isAddLayer {
+                removeSkeletonLayer()
+            }else{
+                status = .off
+            }
         }) { subview in
             subview.recursiveHideSkeleton(reloadDataAfter: reload)
         }
@@ -116,7 +122,7 @@ extension UIView {
     
     func removeSkeletonLayer() {
         guard isSkeletonActive,
-            let layer = skeletonLayer else { return }
+        let layer = skeletonLayer else { return }
         layer.stopAnimation()
         layer.removeLayer()
         skeletonLayer = nil

@@ -23,4 +23,22 @@ class SkeletonCollectionDelegate: NSObject {
 extension SkeletonCollectionDelegate: UITableViewDelegate { }
 
 // MARK: - UICollectionViewDataSource
-extension SkeletonCollectionDelegate: UICollectionViewDelegate { }
+extension SkeletonCollectionDelegate: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if let layout = self.originalCollectionViewDelegate as? UICollectionViewDelegateFlowLayout {
+            return layout.collectionView?(collectionView, layout: collectionViewLayout, sizeForItemAt: indexPath) ?? CGSize.zero
+        }
+        return CGSize.zero
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if collectionView.isSkeletonActive {
+            if !cell.isSkeletonActive {
+                DispatchQueue.main.async {
+                    cell.showAnimatedGradientSkeleton()
+                }
+            }
+        }
+    }
+}

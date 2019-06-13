@@ -4,6 +4,10 @@ import UIKit
 
 public extension UIView {
     
+    @objc var isAddLayer: Bool {
+        return true
+    }
+    
     @IBInspectable
     var isSkeletonable: Bool {
         get { return skeletonable }

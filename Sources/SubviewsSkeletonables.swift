@@ -29,7 +29,7 @@ extension UITableViewCell {
 extension UICollectionView {
 
     override var subviewsToSkeleton: [UIView] {
-        return subviews
+        return visibleCells
     }
 }
 
